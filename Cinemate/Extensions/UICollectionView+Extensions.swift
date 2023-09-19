@@ -5,6 +5,14 @@
 //  Created by Indo Teknologi Utama on 18/09/23.
 //
 import UIKit
+class CollectionCell: UICollectionViewCell {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupView()
+    }
+    required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    func setupView() { }
+}
 extension NSObject {
 
     class var nameOfClass: String {

@@ -19,7 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
            
         let window = UIWindow(windowScene: windowScene)
-        window.rootViewController = ViewController() // Replace with your custom view controller
+        window.rootViewController = MainVC() // Replace with your custom view controller
         window.makeKeyAndVisible()
         
         self.window = window

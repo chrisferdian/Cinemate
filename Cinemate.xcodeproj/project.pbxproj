@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		3AE70C2B2AB8537300446A6C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE70C2A2AB8537300446A6C /* AppDelegate.swift */; };
 		3AE70C2D2AB8537300446A6C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE70C2C2AB8537300446A6C /* SceneDelegate.swift */; };
-		3AE70C2F2AB8537300446A6C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE70C2E2AB8537300446A6C /* ViewController.swift */; };
+		3AE70C2F2AB8537300446A6C /* MainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE70C2E2AB8537300446A6C /* MainVC.swift */; };
 		3AE70C342AB8537400446A6C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3AE70C332AB8537400446A6C /* Assets.xcassets */; };
 		3AE70C372AB8537400446A6C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3AE70C352AB8537400446A6C /* LaunchScreen.storyboard */; };
 		3AE70C422AB8537400446A6C /* CinemateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE70C412AB8537400446A6C /* CinemateTests.swift */; };
@@ -20,6 +20,8 @@
 		3AE70C602AB85D3500446A6C /* UICollectionView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE70C5F2AB85D3500446A6C /* UICollectionView+Extensions.swift */; };
 		3AE70C622AB85D5300446A6C /* UILabel+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE70C612AB85D5300446A6C /* UILabel+Extensions.swift */; };
 		3AE70C652AB85DE200446A6C /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE70C642AB85DE200446A6C /* Observable.swift */; };
+		3AE70C6A2AB918B900446A6C /* ImageCVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE70C692AB918B900446A6C /* ImageCVCell.swift */; };
+		3AE70C6C2AB9197900446A6C /* UIImageView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE70C6B2AB9197900446A6C /* UIImageView+Extensions.swift */; };
 		574025E96D461D07D55F7C6D /* Pods_Cinemate_CinemateUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23069EE7E82296881117DE3A /* Pods_Cinemate_CinemateUITests.framework */; };
 		7C1373774A37E947F686E7CB /* Pods_Cinemate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A67502BB2F31BE630797A688 /* Pods_Cinemate.framework */; };
 		93E41C0528DC15165BBD5F23 /* Pods_CinemateTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 263DC74ABF2D5FA3B13E439E /* Pods_CinemateTests.framework */; };
@@ -50,7 +52,7 @@
 		3AE70C272AB8537300446A6C /* Cinemate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cinemate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3AE70C2A2AB8537300446A6C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3AE70C2C2AB8537300446A6C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		3AE70C2E2AB8537300446A6C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		3AE70C2E2AB8537300446A6C /* MainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainVC.swift; sourceTree = "<group>"; };
 		3AE70C332AB8537400446A6C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3AE70C362AB8537400446A6C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3AE70C382AB8537400446A6C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -64,6 +66,8 @@
 		3AE70C5F2AB85D3500446A6C /* UICollectionView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+Extensions.swift"; sourceTree = "<group>"; };
 		3AE70C612AB85D5300446A6C /* UILabel+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extensions.swift"; sourceTree = "<group>"; };
 		3AE70C642AB85DE200446A6C /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
+		3AE70C692AB918B900446A6C /* ImageCVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCVCell.swift; sourceTree = "<group>"; };
+		3AE70C6B2AB9197900446A6C /* UIImageView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extensions.swift"; sourceTree = "<group>"; };
 		4105264FFB40888BF28E5DC6 /* Pods-Cinemate-CinemateUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Cinemate-CinemateUITests.debug.xcconfig"; path = "Target Support Files/Pods-Cinemate-CinemateUITests/Pods-Cinemate-CinemateUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		58E3DBCFF851A62FE9C6A589 /* Pods-Cinemate.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Cinemate.debug.xcconfig"; path = "Target Support Files/Pods-Cinemate/Pods-Cinemate.debug.xcconfig"; sourceTree = "<group>"; };
 		852970A29C60CA9DD18CEB1C /* Pods-CinemateTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CinemateTests.debug.xcconfig"; path = "Target Support Files/Pods-CinemateTests/Pods-CinemateTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -124,11 +128,11 @@
 		3AE70C292AB8537300446A6C /* Cinemate */ = {
 			isa = PBXGroup;
 			children = (
+				3AE70C662AB9188600446A6C /* Modules */,
 				3AE70C632AB85DDA00446A6C /* Helpers */,
 				3AE70C5A2AB85CC600446A6C /* Extensions */,
 				3AE70C2A2AB8537300446A6C /* AppDelegate.swift */,
 				3AE70C2C2AB8537300446A6C /* SceneDelegate.swift */,
-				3AE70C2E2AB8537300446A6C /* ViewController.swift */,
 				3AE70C332AB8537400446A6C /* Assets.xcassets */,
 				3AE70C352AB8537400446A6C /* LaunchScreen.storyboard */,
 				3AE70C382AB8537400446A6C /* Info.plist */,
@@ -160,6 +164,7 @@
 				3AE70C5D2AB85D2000446A6C /* UIEdgeInsets+Extension.swift */,
 				3AE70C5F2AB85D3500446A6C /* UICollectionView+Extensions.swift */,
 				3AE70C612AB85D5300446A6C /* UILabel+Extensions.swift */,
+				3AE70C6B2AB9197900446A6C /* UIImageView+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -168,8 +173,25 @@
 			isa = PBXGroup;
 			children = (
 				3AE70C642AB85DE200446A6C /* Observable.swift */,
+				3AE70C692AB918B900446A6C /* ImageCVCell.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		3AE70C662AB9188600446A6C /* Modules */ = {
+			isa = PBXGroup;
+			children = (
+				3AE70C672AB9188C00446A6C /* Main */,
+			);
+			path = Modules;
+			sourceTree = "<group>";
+		};
+		3AE70C672AB9188C00446A6C /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				3AE70C2E2AB8537300446A6C /* MainVC.swift */,
+			);
+			path = Main;
 			sourceTree = "<group>";
 		};
 		56672A3B79BE912E6A6768E6 /* Frameworks */ = {
@@ -192,7 +214,6 @@
 				852970A29C60CA9DD18CEB1C /* Pods-CinemateTests.debug.xcconfig */,
 				1F73940BCC3CB35307DF84A4 /* Pods-CinemateTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -434,8 +455,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3AE70C6C2AB9197900446A6C /* UIImageView+Extensions.swift in Sources */,
+				3AE70C6A2AB918B900446A6C /* ImageCVCell.swift in Sources */,
 				3AE70C652AB85DE200446A6C /* Observable.swift in Sources */,
-				3AE70C2F2AB8537300446A6C /* ViewController.swift in Sources */,
+				3AE70C2F2AB8537300446A6C /* MainVC.swift in Sources */,
 				3AE70C2B2AB8537300446A6C /* AppDelegate.swift in Sources */,
 				3AE70C602AB85D3500446A6C /* UICollectionView+Extensions.swift in Sources */,
 				3AE70C5C2AB85CCE00446A6C /* UIView+Extensions.swift in Sources */,
