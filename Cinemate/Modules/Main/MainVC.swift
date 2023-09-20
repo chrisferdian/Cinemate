@@ -8,7 +8,9 @@
 import UIKit
 enum GeneralSection {
     case main
+    case loadingIndicator
 }
+struct LoadingIndicatorItem: Hashable { let id = UUID() }
 typealias GeneralCDataSource = UICollectionViewDiffableDataSource<GeneralSection, AnyHashable>
 typealias GeneralCSnapshot = NSDiffableDataSourceSnapshot<GeneralSection, AnyHashable>
 
@@ -17,7 +19,9 @@ class MainVC: UIViewController {
     private lazy var collectionView: UICollectionView = configureCollectionView()
     private lazy var dataSource = configureDataSource()
     private var snapshot: GeneralCSnapshot
-    
+    private var model: MainEntity = .init()
+    var presenter: MainPresenterInput!
+
     init() {
         self.snapshot = GeneralCSnapshot()
         super.init(nibName: nil, bundle: nil)
@@ -29,16 +33,32 @@ class MainVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .red
+        view.backgroundColor = .black
         view.addSubview(collectionView)
         collectionView.fillSuperviewSafeArea()
         collectionView.dataSource = self.dataSource
+        presenter.viewDidLoad()
     }
-    
     private func configureCollectionView() -> UICollectionView {
-        // Create a collection view layout
-        let layout = UICollectionViewCompositionalLayout { (section, environment) -> NSCollectionLayoutSection? in
-            
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
+        collectionView.register(ImageCVCell.self)
+        collectionView.register(LoadingCVCell.self)
+        collectionView.backgroundColor = .black
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.contentInset = .zero
+        collectionView.delegate = self
+        return collectionView
+    }
+    private func createLayout() -> UICollectionViewLayout {
+        return UICollectionViewCompositionalLayout { [unowned self] index, env in
+            return self.sectionFor(index: index, environment: env)
+        }
+    }
+    /// - Tag: ListAppearances
+    func sectionFor(index: Int, environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
+        let section = snapshot.sectionIdentifiers[index]
+        switch section {
+        case .main:
             // Define item size with a fixed height of 160
             let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0/3.0), heightDimension: .absolute(160))
             
@@ -60,31 +80,95 @@ class MainVC: UIViewController {
             section.contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 0, bottom: 12, trailing: 0)
             
             return section
+        case .loadingIndicator:
+            // Define item size with a fixed height of 160
+            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(80))
+            
+            // Create an item with the defined size
+            let item = NSCollectionLayoutItem(layoutSize: itemSize)
+            
+            // Define the spacing between items (horizontal)
+            item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 5)
+            
+            // Create a group with 3 items in 1 row
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(80))
+            let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+            
+            // Define the spacing between groups (vertical)
+            let section = NSCollectionLayoutSection(group: group)
+            section.interGroupSpacing = 10
+            
+            // Define the spacing between sections (rows)
+            section.contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 0, bottom: 12, trailing: 0)
+            
+            return section
         }
-        
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.register(ImageCVCell.self)
-        collectionView.backgroundColor = .black
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.contentInset = .zero
-        return collectionView
     }
-    
     private func configureDataSource() -> GeneralCDataSource {
         let _dataSource = GeneralCDataSource(collectionView: collectionView) { collectionView, indexPath, itemIdentifier in
+            if self.snapshot.sectionIdentifiers[indexPath.section] == .loadingIndicator {
+                let indicatorCell: LoadingCVCell = collectionView.dequeue(at: indexPath)
+                return indicatorCell
+            }
             let cell: ImageCVCell = collectionView.dequeue(at: indexPath)
-            
+            if let movie = itemIdentifier as? Movie {
+                cell.bind(with: movie)
+            }
             return cell
         }
         
         snapshot.appendSections([.main])
-        snapshot.appendItems([1,2,3,4,5,6])
         _dataSource.apply(snapshot)
         return _dataSource
     }
 }
-
-
+extension MainVC: MainPresenterOutput {
+    func displayMovies(_ movies: [Movie]) {
+        if !snapshot.sectionIdentifiers.contains(.main) {
+            snapshot.appendSections([.main])
+            dataSource.apply(snapshot)
+        }
+        snapshot.appendItems(movies, toSection: .main)
+        DispatchQueue.main.async {
+            self.dataSource.apply(self.snapshot, animatingDifferences: true)
+        }
+    }
+    
+    func displayLoadingIndicator(_ isVisible: Bool) {
+        if isVisible {
+            if !snapshot.sectionIdentifiers.contains(.loadingIndicator) {
+                snapshot.appendSections([.loadingIndicator])
+            }
+            snapshot.appendItems([LoadingIndicatorItem()])
+        } else {
+            if snapshot.sectionIdentifiers.contains(.loadingIndicator) {
+                snapshot.deleteSections([.loadingIndicator])
+            }
+        }
+        DispatchQueue.main.async {
+            self.dataSource.apply(self.snapshot, animatingDifferences: true)
+        }
+    }
+    
+    func displayError(_ message: String) {
+        
+    }
+}
+extension MainVC: UICollectionViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let contentOffsetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        let screenHeight = scrollView.bounds.height
+        
+        // Define a threshold (e.g., 100 pixels from the bottom) to trigger the "load more" action
+        let loadMoreThreshold: CGFloat = 100
+        
+        // Check if the user has scrolled close to the bottom
+        if contentOffsetY + screenHeight + loadMoreThreshold >= contentHeight {
+            presenter.loadMoreData()
+        }
+    }
+}
 
 extension UIColor {
     static var random: UIColor {

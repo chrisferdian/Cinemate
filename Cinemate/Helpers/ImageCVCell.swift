@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class ImageCVCell: CollectionCell {
     
@@ -16,5 +17,11 @@ class ImageCVCell: CollectionCell {
         contentView.addSubview(imageView)
         imageView.fillSuperView()
         imageView.backgroundColor = .random
+    }
+    
+    func bind(with movie: Movie) {
+        let urlString = "http://image.tmdb.org/t/p/w500/"+(movie.poster_path ?? "-")
+        guard let url = URL(string: urlString) else { return }
+        imageView.sd_setImage(with: url)
     }
 }
