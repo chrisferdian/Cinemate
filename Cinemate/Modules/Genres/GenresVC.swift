@@ -1,63 +1,56 @@
 //
-//  ViewController.swift
+//  GenresVC.swift
 //  Cinemate
 //
-//  Created by Indo Teknologi Utama on 18/09/23.
+//  Created by Indo Teknologi Utama on 21/09/23.
 //
 
 import UIKit
-enum GeneralSection {
-    case main
-    case loadingIndicator
-}
-struct LoadingIndicatorItem: Hashable { let id = UUID() }
-typealias GeneralCDataSource = UICollectionViewDiffableDataSource<GeneralSection, AnyHashable>
-typealias GeneralCSnapshot = NSDiffableDataSourceSnapshot<GeneralSection, AnyHashable>
 
-class MainVC: UIViewController {
+extension UIButton {
+    convenience init(image: UIImage?) {
+        self.init()
+        translatesAutoresizingMaskIntoConstraints = false
+        setImage(image, for: .normal)
+    }
+}
+class GenresVC: UIViewController {
     
     private lazy var collectionView: UICollectionView = configureCollectionView()
+    let buttonClose = UIButton(image: .init(systemName: "xmark.circle.fill"))
     private lazy var dataSource = configureDataSource()
-    private var snapshot: GeneralCSnapshot
-    private var model: MainEntity = .init()
-    var presenter: MainPresenterInput!
+    private var snapshot: GeneralCSnapshot = GeneralCSnapshot()
 
-    init() {
-        self.snapshot = GeneralCSnapshot()
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Create a UIBarButtonItem with the custom view
-        let barButtonItem = UIBarButtonItem(title: "All Genres", image: nil, target: self, action: #selector(genresTapped))
-        barButtonItem.tintColor = .white
-        self.navigationItem.leftBarButtonItem = barButtonItem
-        
         view.backgroundColor = .black
-        view.addSubview(collectionView)
-        collectionView.fillSuperviewSafeArea()
-        collectionView.dataSource = self.dataSource
-        presenter.viewDidLoad()
-    }
-    @objc func genresTapped() {
-        presenter.didTapGenres()
-    }
-    func genreSelected(with item: AnyHashable) {
         
+        buttonClose.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(buttonClose)
+        buttonClose.square(edge: 69)
+        buttonClose.centerXToSuperview()
+        buttonClose.bottomToSuperview(space: -33)
+        buttonClose.tintColor = .white
+        buttonClose.addTarget(self, action: #selector(didTapClose), for: .touchUpInside)
+        
+        view.addSubview(collectionView)
+        collectionView.horizontalSuperview()
+        collectionView.topToSuperview()
+        collectionView.bottom(toAnchor: buttonClose.topAnchor, space: 8)
+        collectionView.dataSource = self.dataSource
     }
+    
+    @objc func didTapClose() {
+        self.dismiss(animated: true)
+    }
+    
     private func configureCollectionView() -> UICollectionView {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
-        collectionView.register(ImageCVCell.self)
+        collectionView.register(GenreCVCell.self)
         collectionView.register(LoadingCVCell.self)
         collectionView.backgroundColor = .black
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.contentInset = .zero
-        collectionView.delegate = self
         return collectionView
     }
     private func createLayout() -> UICollectionViewLayout {
@@ -70,8 +63,7 @@ class MainVC: UIViewController {
         let section = snapshot.sectionIdentifiers[index]
         switch section {
         case .main:
-            // Define item size with a fixed height of 160
-            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0/3.0), heightDimension: .absolute(160))
+            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(44))
             
             // Create an item with the defined size
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -115,6 +107,7 @@ class MainVC: UIViewController {
             return section
         }
     }
+    
     private func configureDataSource() -> GeneralCDataSource {
         let _dataSource = GeneralCDataSource(collectionView: collectionView) { collectionView, indexPath, itemIdentifier in
             if self.snapshot.sectionIdentifiers[indexPath.section] == .loadingIndicator {
@@ -132,67 +125,5 @@ class MainVC: UIViewController {
         snapshot.appendSections([.main])
         _dataSource.apply(snapshot)
         return _dataSource
-    }
-}
-extension MainVC: MainPresenterOutput {
-    func displayMovies(_ movies: [Movie]) {
-        if !snapshot.sectionIdentifiers.contains(.main) {
-            snapshot.appendSections([.main])
-            dataSource.apply(snapshot)
-        }
-        snapshot.appendItems(movies, toSection: .main)
-        DispatchQueue.main.async {
-            self.dataSource.apply(self.snapshot, animatingDifferences: true)
-        }
-    }
-    
-    func displayLoadingIndicator(_ isVisible: Bool) {
-        if isVisible {
-            if !snapshot.sectionIdentifiers.contains(.loadingIndicator) {
-                snapshot.appendSections([.loadingIndicator])
-            }
-            snapshot.appendItems([LoadingIndicatorItem()])
-        } else {
-            if snapshot.sectionIdentifiers.contains(.loadingIndicator) {
-                snapshot.deleteSections([.loadingIndicator])
-            }
-        }
-        DispatchQueue.main.async {
-            self.dataSource.apply(self.snapshot, animatingDifferences: true)
-        }
-    }
-    
-    func displayError(_ message: String) {
-        
-    }
-    
-    func displayGenreName(_ title: String) {
-        self.navigationItem.leftBarButtonItem?.title = title
-    }
-}
-extension MainVC: UICollectionViewDelegate {
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let contentOffsetY = scrollView.contentOffset.y
-        let contentHeight = scrollView.contentSize.height
-        let screenHeight = scrollView.bounds.height
-        
-        // Define a threshold (e.g., 100 pixels from the bottom) to trigger the "load more" action
-        let loadMoreThreshold: CGFloat = 20
-        
-        // Check if the user has scrolled close to the bottom
-        if contentOffsetY + screenHeight + loadMoreThreshold >= contentHeight {
-            presenter.loadMoreData()
-        }
-    }
-}
-
-extension UIColor {
-    static var random: UIColor {
-        return UIColor(
-            red: .random(in: 0...1),
-            green: .random(in: 0...1),
-            blue: .random(in: 0...1),
-            alpha: 1.0
-        )
     }
 }

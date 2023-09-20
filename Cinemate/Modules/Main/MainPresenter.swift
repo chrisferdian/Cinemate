@@ -9,12 +9,14 @@ import Foundation
 protocol MainPresenterInput {
     func viewDidLoad()
     func loadMoreData()
+    func didTapGenres()
 }
 
 protocol MainPresenterOutput: AnyObject {
     func displayMovies(_ movies: [Movie])
     func displayLoadingIndicator(_ isVisible: Bool)
     func displayError(_ message: String)
+    func displayGenreName(_ title: String)
 }
 
 class MainPresenter: MainPresenterInput, MainInteractorOutput {
@@ -57,5 +59,15 @@ class MainPresenter: MainPresenterInput, MainInteractorOutput {
         view?.displayLoadingIndicator(false)
         view?.displayError(error.localizedDescription)
         isLoadingMoreData = false
+    }
+    
+    func didTapGenres() {
+        router?.navigateToGenres(pickerDelegate: self)
+    }
+}
+
+extension MainPresenter: IDataPickerDelegate {
+    func didDataPicker(_ data: [String : Any]) {
+        
     }
 }

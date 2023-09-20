@@ -9,6 +9,7 @@ import UIKit
 
 protocol MainRouter {
     // Define navigation methods
+    func navigateToGenres(pickerDelegate: IDataPickerDelegate)
 }
 
 class MainRouterImpl: MainRouter {
@@ -19,4 +20,11 @@ class MainRouterImpl: MainRouter {
     }
 
     // Implement navigation methods as needed
+    func navigateToGenres(pickerDelegate: IDataPickerDelegate) {
+        let vc = GenresVC()
+        vc.modalPresentationStyle = .overFullScreen
+        vc.dataPickerDelegate = pickerDelegate
+        viewController?.present(vc, animated: true)
+    }
 }
+
