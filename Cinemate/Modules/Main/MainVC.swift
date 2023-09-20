@@ -108,6 +108,7 @@ class MainVC: UIViewController {
         let _dataSource = GeneralCDataSource(collectionView: collectionView) { collectionView, indexPath, itemIdentifier in
             if self.snapshot.sectionIdentifiers[indexPath.section] == .loadingIndicator {
                 let indicatorCell: LoadingCVCell = collectionView.dequeue(at: indexPath)
+                indicatorCell.start()
                 return indicatorCell
             }
             let cell: ImageCVCell = collectionView.dequeue(at: indexPath)
@@ -161,7 +162,7 @@ extension MainVC: UICollectionViewDelegate {
         let screenHeight = scrollView.bounds.height
         
         // Define a threshold (e.g., 100 pixels from the bottom) to trigger the "load more" action
-        let loadMoreThreshold: CGFloat = 100
+        let loadMoreThreshold: CGFloat = 20
         
         // Check if the user has scrolled close to the bottom
         if contentOffsetY + screenHeight + loadMoreThreshold >= contentHeight {
