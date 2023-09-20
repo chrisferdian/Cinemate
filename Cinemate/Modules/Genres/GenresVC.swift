@@ -20,6 +20,7 @@ class GenresVC: UIViewController {
     let buttonClose = UIButton(image: .init(systemName: "xmark.circle.fill"))
     private lazy var dataSource = configureDataSource()
     private var snapshot: GeneralCSnapshot = GeneralCSnapshot()
+    var presenter: GenresPresenterInput!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,6 +39,7 @@ class GenresVC: UIViewController {
         collectionView.topToSuperview()
         collectionView.bottom(toAnchor: buttonClose.topAnchor, space: 8)
         collectionView.dataSource = self.dataSource
+        presenter.viewDidload()
     }
     
     @objc func didTapClose() {
@@ -51,6 +53,7 @@ class GenresVC: UIViewController {
         collectionView.backgroundColor = .black
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.contentInset = .zero
+        collectionView.delegate = self
         return collectionView
     }
     private func createLayout() -> UICollectionViewLayout {
@@ -72,7 +75,7 @@ class GenresVC: UIViewController {
             item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 5)
             
             // Create a group with 3 items in 1 row
-            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(160))
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(44))
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
             
             // Define the spacing between groups (vertical)
@@ -115,15 +118,57 @@ class GenresVC: UIViewController {
                 indicatorCell.start()
                 return indicatorCell
             }
-            let cell: ImageCVCell = collectionView.dequeue(at: indexPath)
-            if let movie = itemIdentifier as? Movie {
-                cell.bind(with: movie)
+            let cell: GenreCVCell = collectionView.dequeue(at: indexPath)
+            if let genre = itemIdentifier as? GenreInfo {
+                cell.bind(with: genre)
             }
             return cell
         }
         
-        snapshot.appendSections([.main])
+        snapshot.appendSections([.main, .loadingIndicator])
         _dataSource.apply(snapshot)
         return _dataSource
+    }
+}
+extension GenresVC: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if let genres = snapshot.itemIdentifiers(inSection: .main) as? [GenreInfo] {
+            let genre = genres[indexPath.item]
+            self.dataPickerDelegate?.didDataPicker(["genre": genre])
+            self.dismiss(animated: true)
+        }
+    }
+}
+extension GenresVC: GenresPresenterOutput {
+    
+    func displayGenres(_ genres: [GenreInfo]) {
+        if !snapshot.sectionIdentifiers.contains(.main) {
+            snapshot.appendSections([.main])
+            dataSource.apply(snapshot)
+        }
+        snapshot.appendItems(genres, toSection: .main)
+        DispatchQueue.main.async {
+            self.dataSource.apply(self.snapshot, animatingDifferences: true)
+        }
+    }
+    
+    func displayLoadingIndicator(_ isVisible: Bool) {
+        if isVisible {
+            if !snapshot.sectionIdentifiers.contains(.loadingIndicator) {
+                snapshot.appendSections([.loadingIndicator])
+            }
+            snapshot.appendItems([LoadingIndicatorItem()])
+        } else {
+            if snapshot.sectionIdentifiers.contains(.loadingIndicator) {
+                snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .loadingIndicator))
+            }
+        }
+        DispatchQueue.main.async {
+            self.dataSource.apply(self.snapshot, animatingDifferences: true)
+        }
+    }
+    
+    func displayError(_ message: String) {
+        
     }
 }

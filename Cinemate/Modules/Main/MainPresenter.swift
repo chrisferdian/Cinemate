@@ -68,6 +68,8 @@ class MainPresenter: MainPresenterInput, MainInteractorOutput {
 
 extension MainPresenter: IDataPickerDelegate {
     func didDataPicker(_ data: [String : Any]) {
-        
+        if let genre = data["genre"] as? GenreInfo {
+            self.view?.displayGenreName(genre.name)
+        }
     }
 }

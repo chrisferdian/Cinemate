@@ -9,11 +9,14 @@ import Foundation
 enum APIRouter {
     static let baseURL = "https://api.themoviedb.org/3/"
     case discover(page: Int)
+    case genres
     
     var path: String {
         switch self {
         case .discover:
             return "discover/movie"
+        case .genres:
+            return "genre/movie/list?language=en"
         }
     }
     
@@ -21,10 +24,9 @@ enum APIRouter {
         switch self {
         case .discover(let page):
             return [
-                "page": page,
-//                "page_size": 10,
-//                "key": "f5335289a413419ba2d3e6cf79dbc219"
+                "page": page
             ]
+        default: return nil
         }
     }
 }

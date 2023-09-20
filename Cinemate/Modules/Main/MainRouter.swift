@@ -21,7 +21,7 @@ class MainRouterImpl: MainRouter {
 
     // Implement navigation methods as needed
     func navigateToGenres(pickerDelegate: IDataPickerDelegate) {
-        let vc = GenresVC()
+        let vc = GenresBuilder.create()
         vc.modalPresentationStyle = .overFullScreen
         vc.dataPickerDelegate = pickerDelegate
         viewController?.present(vc, animated: true)
