@@ -9,6 +9,7 @@ import Foundation
 protocol MainInteractorInput {
     func fetchMovies(page: Int)
     var totalPages: Int? { get set }
+    var genre: GenreInfo? { get set }
 }
 
 protocol MainInteractorOutput: AnyObject {
@@ -19,9 +20,10 @@ protocol MainInteractorOutput: AnyObject {
 class MainInteractor: MainInteractorInput {
     weak var output: MainInteractorOutput?
     var totalPages: Int?
+    var genre: GenreInfo?
     
     func fetchMovies(page: Int) {
-        NetworkingManager.shared.request(.discover(page: page), method: .get) { [weak self] (result: Result<MainEntity.Response, Error>) in
+        NetworkingManager.shared.request(.discover(page: page, genre: genre?.id), method: .get) { [weak self] (result: Result<MainEntity.Response, Error>) in
             switch result {
             case .success(let success):
                 self?.output?.didFetchMovies(success.results)

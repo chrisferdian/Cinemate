@@ -23,7 +23,7 @@ class NetworkingManager: NetworkingManagerDelegate {
         
         var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
         if method == .get {
-            components?.queryItems = route.parameters?.map { URLQueryItem(name: $0.key, value: "\($0.value)") }
+            components?.queryItems = route.parameters?.filter({ $0.value != nil }).map { URLQueryItem(name: $0.key, value: "\($0.value!)") }
         }
         guard let finalURL = components?.url else {
             completion(.failure(NetworkError.invalidURL))

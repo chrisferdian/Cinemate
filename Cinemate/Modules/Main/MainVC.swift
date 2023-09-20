@@ -169,6 +169,13 @@ extension MainVC: MainPresenterOutput {
     func displayGenreName(_ title: String) {
         self.navigationItem.leftBarButtonItem?.title = title
     }
+    
+    func removeExistingMovies() {
+        snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .main))
+        DispatchQueue.main.async {
+            self.dataSource.apply(self.snapshot, animatingDifferences: true)
+        }
+    }
 }
 extension MainVC: UICollectionViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
