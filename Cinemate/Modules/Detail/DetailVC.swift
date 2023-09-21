@@ -48,6 +48,7 @@ class DetailVC: UIViewController {
         collectionView.backgroundColor = .black
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.contentInset = .zero
+        collectionView.delegate = self
         return collectionView
     }
     private func createLayout() -> UICollectionViewLayout {
@@ -212,7 +213,16 @@ class DetailVC: UIViewController {
         return _dataSource
     }
 }
-
+extension DetailVC: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let section = snapshot.sectionIdentifiers[indexPath.section]
+        if section == .suggestion {
+            if let movies = snapshot.itemIdentifiers(inSection: .suggestion) as? [Movie] {
+                self.navigationController?.pushViewController(DetailBuilder.create(entity: movies[indexPath.row].toDetail()), animated: true)
+            }
+        }
+    }
+}
 extension DetailVC: DetailPresenterOutput {
     func displayVideos(_ videos: [MovieVideo]) {
         if let ytKey = videos.first(where: {$0.site?.lowercased() == "youtube"}) {
