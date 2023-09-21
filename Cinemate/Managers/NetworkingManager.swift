@@ -58,6 +58,7 @@ class NetworkingManager: NetworkingManagerDelegate {
                 let decodedData = try decoder.decode(T.self, from: data)
                 completion(.success(decodedData))
             } catch {
+                print(error)
                 completion(.failure(error))
             }
         }

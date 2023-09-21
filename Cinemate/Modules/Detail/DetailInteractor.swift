@@ -9,10 +9,14 @@ import Foundation
 
 protocol DetailInteractorInput {
     func fetchVideos(id: Int)
+    func fetchReviews(id: Int)
 }
 protocol DetailInteractorOutput: AnyObject {
     func didFetchVideos(_ list: [MovieVideo])
     func didFailToFetchVideos(withError error: Error)
+    
+    func didFetchReviews(_ list: [MovieReview])
+    func didFailToFetchReviews(withError error: Error)
 }
 
 class DetailInteractor: DetailInteractorInput {
@@ -26,6 +30,17 @@ class DetailInteractor: DetailInteractorInput {
                 self?.output?.didFetchVideos(success.results)
             case .failure(let failure):
                 self?.output?.didFailToFetchVideos(withError: failure)
+            }
+        }
+    }
+    
+    func fetchReviews(id: Int) {
+        NetworkingManager.shared.request(.reviews(id: id, page: 1), method: .get) { [weak self] (result: Result<ReviewResponse, Error>) in
+            switch result {
+            case .success(let success):
+                self?.output?.didFetchReviews(success.results ?? [])
+            case .failure(let failure):
+                self?.output?.didFailToFetchReviews(withError: failure)
             }
         }
     }

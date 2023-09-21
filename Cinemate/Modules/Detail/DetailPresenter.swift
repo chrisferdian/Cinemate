@@ -11,7 +11,7 @@ protocol DetailPresenterInput {
 }
 protocol DetailPresenterOutput: AnyObject {
     func displayVideos(_ videos: [MovieVideo])
-
+    func displayReviews(_ reviews: [MovieReview])
 }
 
 class DetailPresenter: DetailPresenterInput , DetailInteractorOutput {
@@ -20,6 +20,7 @@ class DetailPresenter: DetailPresenterInput , DetailInteractorOutput {
     
     func viewdidLoad(entity: DetailEntiy) {
         interactor?.fetchVideos(id: entity.movie.id)
+        interactor?.fetchReviews(id: entity.movie.id)
     }
     
     func didFetchVideos(_ list: [MovieVideo]) {
@@ -28,5 +29,13 @@ class DetailPresenter: DetailPresenterInput , DetailInteractorOutput {
     
     func didFailToFetchVideos(withError error: Error) {
         print(error.localizedDescription)
+    }
+    
+    func didFetchReviews(_ list: [MovieReview]) {
+        view?.displayReviews(list)
+    }
+    
+    func didFailToFetchReviews(withError error: Error) {
+        
     }
 }

@@ -6,13 +6,7 @@
 //
 
 import UIKit
-enum DetailSection {
-    case backdrop
-    case title
-    case headerVideos
-    case description
-    case suggestion
-}
+
 typealias DetailDataSource = UICollectionViewDiffableDataSource<DetailSection, AnyHashable>
 typealias DetailSnapshot = NSDiffableDataSourceSnapshot<DetailSection, AnyHashable>
 
@@ -49,11 +43,12 @@ class DetailVC: UIViewController {
         collectionView.register(DetailTitleCell.self)
         collectionView.register(HeaderVideoCell.self)
         collectionView.register(DetailOverviewCell.self)
-        collectionView.register(LoadingCVCell.self)
+        collectionView.register(DetailReviewItemCell.self)
+        collectionView.register(header: DetailReviewHeaderView.self)
+        collectionView.register(footer: DetailReviewFooterView.self)
         collectionView.backgroundColor = .black
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.contentInset = .zero
-//        collectionView.delegate = self
         return collectionView
     }
     private func createLayout() -> UICollectionViewLayout {
@@ -94,29 +89,8 @@ class DetailVC: UIViewController {
             return defaultLayout(with: 44)
         case .description:
             return defaultLayout(with: 44)
-        default:
-            // Define item size with a fixed height of 160
-            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(150))
-            
-            // Create an item with the defined size
-            let item = NSCollectionLayoutItem(layoutSize: itemSize)
-            
-            // Define the spacing between items (horizontal)
-            item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 5)
-            
-            // Create a group with 3 items in 1 row
-            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(150))
-            let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-            
-            // Define the spacing between groups (vertical)
-            let section = NSCollectionLayoutSection(group: group)
-            section.interGroupSpacing = 10
-            
-            // Define the spacing between sections (rows)
-            section.contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 0, bottom: 12, trailing: 0)
-            
-            return section
-        }
+        case .reviews:
+            return createHorizontalScroll()        }
     }
     
     private func defaultLayout(with height: CGFloat) -> NSCollectionLayoutSection {
@@ -140,6 +114,21 @@ class DetailVC: UIViewController {
         // Define the spacing between sections (rows)
         section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
         
+        return section
+    }
+    func createHorizontalScroll() -> NSCollectionLayoutSection {
+        let width = Int(screenWidth * 0.37)
+        let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .absolute(CGFloat(width)), heightDimension: .absolute(192)))
+//        item.contentInsets = .init(top: 0, leading: 10, bottom: 0, trailing: 0)
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .estimated(screenWidth), heightDimension: .absolute(192)), subitems: [item])
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = .init(top: 8, leading: 12, bottom: 12, trailing: 12)
+        section.interGroupSpacing = 8
+        section.orthogonalScrollingBehavior = .continuous
+        section.boundarySupplementaryItems = [
+            .init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .topLeading),
+            .init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50)), elementKind: UICollectionView.elementKindSectionFooter, alignment: .topLeading)
+        ]
         return section
     }
     private func configureDataSource() -> DetailDataSource {
@@ -176,6 +165,12 @@ class DetailVC: UIViewController {
                     cell.bind(with: model)
                 }
                 return cell
+            case .reviews:
+                let cell: DetailReviewItemCell = collectionView.dequeue(at: indexPath)
+                if let model = itemIdentifier as? MovieReview {
+                    cell.bind(with: model)
+                }
+                return cell
             default:
                 let cell: ImageCVCell = collectionView.dequeue(at: indexPath)
                 if let path = itemIdentifier as? String {
@@ -185,8 +180,17 @@ class DetailVC: UIViewController {
             }
             
         }
-        
-        snapshot.appendSections([.backdrop, .title, .headerVideos, .description])
+        _dataSource.supplementaryViewProvider = { (collectionView, kind, indexPath) in
+            switch kind {
+            case UICollectionView.elementKindSectionHeader:
+                let header: DetailReviewHeaderView = collectionView.dequeue(header: indexPath)
+                return header
+            default:
+                let footer: DetailReviewFooterView = collectionView.dequeue(footer: indexPath)
+                return footer
+            }
+        }
+        snapshot.appendSections([.backdrop, .title, .headerVideos, .description, .reviews])
         snapshot.appendItems([model.movie.backdrop_path], toSection: .backdrop)
         snapshot.appendItems([model.movie.toTitle()], toSection: .title)
         snapshot.appendItems([model.movie.toOverview()], toSection: .description)
@@ -201,5 +205,10 @@ extension DetailVC: DetailPresenterOutput {
             snapshot.appendItems([ytKey], toSection: .headerVideos)
             self.dataSource.apply(snapshot)
         }
+    }
+    
+    func displayReviews(_ reviews: [MovieReview]) {
+        snapshot.appendItems(reviews, toSection: .reviews)
+        self.dataSource.apply(snapshot)
     }
 }

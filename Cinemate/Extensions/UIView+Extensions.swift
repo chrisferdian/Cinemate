@@ -6,7 +6,19 @@
 //
 
 import UIKit
-
+var screenWidth: CGFloat { return UIScreen.main.bounds.width }
+func screenWidth(with ratio: CGFloat) -> CGFloat {
+    return screenWidth * ratio
+}
+func screenWidthDivide(with percen: CGFloat) -> CGFloat {
+    let widthScreen = (screenWidth * percen) / 100
+    let totalScreenWidth = screenWidth -  widthScreen
+    return totalScreenWidth
+}
+var screenHeight: CGFloat { return UIScreen.main.bounds.height }
+func screenHeight(with ratio: CGFloat) -> CGFloat {
+    return screenHeight * ratio
+}
 extension UIView {
     func setBorder(width: CGFloat, color: UIColor) {
         layer.borderColor = color.cgColor
