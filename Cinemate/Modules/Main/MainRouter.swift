@@ -10,6 +10,7 @@ import UIKit
 protocol MainRouter {
     // Define navigation methods
     func navigateToGenres(pickerDelegate: IDataPickerDelegate)
+    func navigateToDetail(entity: DetailEntiy)
 }
 
 class MainRouterImpl: MainRouter {
@@ -25,6 +26,10 @@ class MainRouterImpl: MainRouter {
         vc.modalPresentationStyle = .overFullScreen
         vc.dataPickerDelegate = pickerDelegate
         viewController?.present(vc, animated: true)
+    }
+    
+    func navigateToDetail(entity: DetailEntiy) {
+        viewController?.navigationController?.pushViewController(DetailBuilder.create(entity: entity), animated: true)
     }
 }
 

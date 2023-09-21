@@ -10,6 +10,7 @@ protocol MainPresenterInput {
     func viewDidLoad()
     func loadMoreData()
     func didTapGenres()
+    func didTapMovie(movie: Movie)
 }
 
 protocol MainPresenterOutput: AnyObject {
@@ -64,6 +65,10 @@ class MainPresenter: MainPresenterInput, MainInteractorOutput {
     
     func didTapGenres() {
         router?.navigateToGenres(pickerDelegate: self)
+    }
+    
+    func didTapMovie(movie: Movie) {
+        router?.navigateToDetail(entity: movie.toDetail())
     }
 }
 

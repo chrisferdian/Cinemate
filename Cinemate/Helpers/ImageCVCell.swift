@@ -24,4 +24,9 @@ class ImageCVCell: CollectionCell {
         guard let url = URL(string: urlString) else { return }
         imageView.sd_setImage(with: url)
     }
+    func bind(with path: String) {
+        let urlString = "http://image.tmdb.org/t/p/w500/"+(path)
+        guard let url = URL(string: urlString) else { return }
+        imageView.sd_setImage(with: url)
+    }
 }

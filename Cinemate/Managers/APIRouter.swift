@@ -10,6 +10,7 @@ enum APIRouter {
     static let baseURL = "https://api.themoviedb.org/3/"
     case discover(page: Int, genre: Int?)
     case genres
+    case videos(id: Int)
     
     var path: String {
         switch self {
@@ -17,6 +18,8 @@ enum APIRouter {
             return "discover/movie"
         case .genres:
             return "genre/movie/list?language=en"
+        case .videos(let id):
+            return "movie/\(id)/videos?language=en-U"
         }
     }
     

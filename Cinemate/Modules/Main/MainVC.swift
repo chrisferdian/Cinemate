@@ -191,6 +191,12 @@ extension MainVC: UICollectionViewDelegate {
             presenter.loadMoreData()
         }
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if let movies = snapshot.itemIdentifiers(inSection: .main) as? [Movie] {
+            self.presenter.didTapMovie(movie: movies[indexPath.row])
+        }
+    }
 }
 
 extension UIColor {
