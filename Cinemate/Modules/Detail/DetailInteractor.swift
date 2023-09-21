@@ -11,6 +11,7 @@ protocol DetailInteractorInput {
     func fetchVideos(id: Int)
     func fetchReviews(id: Int)
     func fetchSimilerMovies(id: Int)
+    func fetchCredits(id: Int)
 }
 protocol DetailInteractorOutput: AnyObject {
     func didFetchVideos(_ list: [MovieVideo])
@@ -21,6 +22,9 @@ protocol DetailInteractorOutput: AnyObject {
     
     func didFetchSimilers(_ list: [Movie])
     func didFailToFetchSimilers(withError error: Error)
+    
+    func didFetchCredits(_ list: [CastMovie])
+    func didFailToFetchCredits(withError error: Error)
 }
 
 class DetailInteractor: DetailInteractorInput {
@@ -56,6 +60,17 @@ class DetailInteractor: DetailInteractorInput {
                 self?.output?.didFetchSimilers(success.results)
             case .failure(let failure):
                 self?.output?.didFailToFetchSimilers(withError: failure)
+            }
+        }
+    }
+    
+    func fetchCredits(id: Int) {
+        NetworkingManager.shared.request(.credits(id: id), method: .get) { [weak self] (result: Result<CreditResponse, Error>) in
+            switch result {
+            case .success(let success):
+                self?.output?.didFetchCredits(success.cast ?? [])
+            case .failure(let failure):
+                self?.output?.didFailToFetchCredits(withError: failure)
             }
         }
     }

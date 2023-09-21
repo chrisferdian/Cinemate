@@ -83,3 +83,16 @@ struct AuthorDetails: Codable, Hashable {
         case rating
     }
 }
+
+
+// MARK: - Credits
+struct CreditResponse: Codable {
+    let cast, crew: [CastMovie]?
+}
+
+struct CastMovie: Codable, Hashable {
+    var known_for_department: String?
+    var name: String?
+    var profile_path: String?
+    var character: String?
+}

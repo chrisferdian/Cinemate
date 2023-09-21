@@ -16,6 +16,7 @@ protocol DetailPresenterOutput: AnyObject {
     func displayNullReviews()
     
     func displaySimilerMovies(_ list: [Movie])
+    func displayCredits(cast: [CastMovie])
 }
 
 class DetailPresenter: DetailPresenterInput , DetailInteractorOutput {
@@ -27,6 +28,7 @@ class DetailPresenter: DetailPresenterInput , DetailInteractorOutput {
         interactor?.fetchVideos(id: entity.movie.id)
         interactor?.fetchReviews(id: entity.movie.id)
         interactor?.fetchSimilerMovies(id: entity.movie.id)
+        interactor?.fetchCredits(id: entity.movie.id)
     }
     
     func didFetchVideos(_ list: [MovieVideo]) {
@@ -61,4 +63,11 @@ class DetailPresenter: DetailPresenterInput , DetailInteractorOutput {
         
     }
     
+    func didFetchCredits(_ list: [CastMovie]) {
+        view?.displayCredits(cast: list.filter({ $0.known_for_department?.lowercased() == "acting" }))
+    }
+    
+    func didFailToFetchCredits(withError error: Error) {
+        
+    }
 }

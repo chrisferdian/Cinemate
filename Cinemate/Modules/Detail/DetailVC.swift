@@ -94,7 +94,10 @@ class DetailVC: UIViewController {
         case .description:
             return defaultLayout(with: 44)
         case .reviews:
-            return createHorizontalScroll()        }
+            return createHorizontalScroll()
+        case .credits:
+            return createCreditLayout()
+        }
     }
     
     private func defaultLayout(with height: CGFloat) -> NSCollectionLayoutSection {
@@ -124,6 +127,19 @@ class DetailVC: UIViewController {
         let width = Int(screenWidth * 0.9)
         let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .absolute(CGFloat(width)), heightDimension: .absolute(192)))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .estimated(screenWidth), heightDimension: .absolute(192)), subitems: [item])
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = .init(top: 8, leading: 12, bottom: 12, trailing: 12)
+        section.interGroupSpacing = 8
+        section.orthogonalScrollingBehavior = .continuous
+        section.boundarySupplementaryItems = [
+            .init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .topLeading),
+            .init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50)), elementKind: UICollectionView.elementKindSectionFooter, alignment: .topLeading)
+        ]
+        return section
+    }
+    func createCreditLayout() -> NSCollectionLayoutSection {
+        let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .absolute(66), heightDimension: .absolute(66)))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .estimated(screenWidth), heightDimension: .absolute(66)), subitems: [item])
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = .init(top: 8, leading: 12, bottom: 12, trailing: 12)
         section.interGroupSpacing = 8
@@ -180,6 +196,14 @@ class DetailVC: UIViewController {
                     cell.bind(with: path)
                 }
                 return cell
+            case .credits:
+                let cell: ImageCVCell = collectionView.dequeue(at: indexPath)
+                cell.setCorner(radius: 33)
+                if let cast = itemIdentifier as? CastMovie,
+                   let path = cast.profile_path {
+                    cell.bind(with: path)
+                }
+                return cell
             }
             
         }
@@ -188,11 +212,10 @@ class DetailVC: UIViewController {
             switch kind {
             case UICollectionView.elementKindSectionHeader:
                 let header: DetailReviewHeaderView = collectionView.dequeue(header: indexPath)
+                header.setTitle(with: section.sectionTitle)
                 if section == .suggestion {
-                    header.setTitle(with: "Similer movies")
                     header.setSeeAllVisibility(isHidden: true)
                 } else {
-                    header.setTitle(with: "Reviews")
                     header.setSeeAllVisibility(isHidden: false)
                     header.onTappedSeeAll = { [weak self] in
                         guard let `self` = self else { return }
@@ -205,7 +228,7 @@ class DetailVC: UIViewController {
                 return footer
             }
         }
-        snapshot.appendSections([.backdrop, .title, .headerVideos, .description, .reviews, .suggestion])
+        snapshot.appendSections([.backdrop, .title, .headerVideos, .description, .credits, .reviews, .suggestion])
         snapshot.appendItems([model.movie.backdrop_path], toSection: .backdrop)
         snapshot.appendItems([model.movie.toTitle()], toSection: .title)
         snapshot.appendItems([model.movie.toOverview()], toSection: .description)
@@ -245,6 +268,11 @@ extension DetailVC: DetailPresenterOutput {
     
     func displaySimilerMovies(_ list: [Movie]) {
         snapshot.appendItems(list, toSection: .suggestion)
+        self.dataSource.apply(snapshot)
+    }
+    
+    func displayCredits(cast: [CastMovie]) {
+        snapshot.appendItems(cast, toSection: .credits)
         self.dataSource.apply(snapshot)
     }
 }

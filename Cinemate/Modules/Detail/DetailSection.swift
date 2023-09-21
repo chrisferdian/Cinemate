@@ -13,4 +13,14 @@ enum DetailSection {
     case description
     case suggestion
     case reviews
+    case credits
+    
+    var sectionTitle: String {
+        switch self {
+        case .credits: return "Credits"
+        case .reviews: return "Reviews"
+        case .suggestion: return "Similer Movies"
+        default: return ""
+        }
+    }
 }
