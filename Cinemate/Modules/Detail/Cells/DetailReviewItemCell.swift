@@ -27,7 +27,9 @@ class DetailReviewFooterView: UICollectionReusableView {
 class DetailReviewHeaderView: UICollectionReusableView {
     
     var onTappedSeeAll: (()-> Void)?
-    
+    let label = UILabel()
+    let buttonSeeAll = UIButton()
+
     override init(frame: CGRect) {
         
         super.init(frame: frame)
@@ -41,8 +43,6 @@ class DetailReviewHeaderView: UICollectionReusableView {
     
     private func setupView() {
         backgroundColor = .black
-        let label = UILabel()
-        let buttonSeeAll = UIButton()
         buttonSeeAll.translatesAutoresizingMaskIntoConstraints = false
         buttonSeeAll.setTitle("See All", for: .normal)
         
@@ -50,7 +50,7 @@ class DetailReviewHeaderView: UICollectionReusableView {
         addSubview(label)
         label.horizontalSuperview()
         label.leftToSuperview(space: 16)
-        label.text = "Reviews"
+        label.text = ""
         label.font = .systemFont(ofSize: 24, weight: .bold)
         
         addSubview(buttonSeeAll)
@@ -58,7 +58,12 @@ class DetailReviewHeaderView: UICollectionReusableView {
         buttonSeeAll.centerY(toView: label)
         buttonSeeAll.addTarget(self, action: #selector(didTapSeeAll), for: .touchUpInside)
     }
-    
+    func setSeeAllVisibility(isHidden: Bool) {
+        self.buttonSeeAll.isHidden = isHidden
+    }
+    func setTitle(with text: String) {
+        label.text = text
+    }
     @objc func didTapSeeAll() {
         onTappedSeeAll?()
     }

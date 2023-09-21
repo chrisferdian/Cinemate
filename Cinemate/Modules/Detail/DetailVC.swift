@@ -60,7 +60,8 @@ class DetailVC: UIViewController {
         let section = snapshot.sectionIdentifiers[index]
         switch section {
         case .suggestion:
-            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(44))
+            // Define item size with a fixed height of 160
+            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0/3.0), heightDimension: .absolute(160))
             
             // Create an item with the defined size
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -69,7 +70,7 @@ class DetailVC: UIViewController {
             item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 5)
             
             // Create a group with 3 items in 1 row
-            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(44))
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(160))
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
             
             // Define the spacing between groups (vertical)
@@ -78,7 +79,10 @@ class DetailVC: UIViewController {
             
             // Define the spacing between sections (rows)
             section.contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 0, bottom: 12, trailing: 0)
-            
+            section.boundarySupplementaryItems = [
+                .init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .topLeading),
+                .init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50)), elementKind: UICollectionView.elementKindSectionFooter, alignment: .topLeading)
+            ]
             return section
         case .backdrop:
             return defaultLayout(with: 200)
@@ -169,9 +173,9 @@ class DetailVC: UIViewController {
                     cell.bind(with: model)
                 }
                 return cell
-            default:
+            case .suggestion:
                 let cell: ImageCVCell = collectionView.dequeue(at: indexPath)
-                if let path = itemIdentifier as? String {
+                if let path = itemIdentifier as? Movie {
                     cell.bind(with: path)
                 }
                 return cell
@@ -179,12 +183,20 @@ class DetailVC: UIViewController {
             
         }
         _dataSource.supplementaryViewProvider = { (collectionView, kind, indexPath) in
+            let section = self.snapshot.sectionIdentifiers[indexPath.section]
             switch kind {
             case UICollectionView.elementKindSectionHeader:
                 let header: DetailReviewHeaderView = collectionView.dequeue(header: indexPath)
-                header.onTappedSeeAll = { [weak self] in
-                    guard let `self` = self else { return }
-                    presenter.presentReviews(entity: self.model)
+                if section == .suggestion {
+                    header.setTitle(with: "Similer movies")
+                    header.setSeeAllVisibility(isHidden: true)
+                } else {
+                    header.setTitle(with: "Reviews")
+                    header.setSeeAllVisibility(isHidden: false)
+                    header.onTappedSeeAll = { [weak self] in
+                        guard let `self` = self else { return }
+                        presenter.presentReviews(entity: self.model)
+                    }
                 }
                 return header
             default:
@@ -192,7 +204,7 @@ class DetailVC: UIViewController {
                 return footer
             }
         }
-        snapshot.appendSections([.backdrop, .title, .headerVideos, .description, .reviews])
+        snapshot.appendSections([.backdrop, .title, .headerVideos, .description, .reviews, .suggestion])
         snapshot.appendItems([model.movie.backdrop_path], toSection: .backdrop)
         snapshot.appendItems([model.movie.toTitle()], toSection: .title)
         snapshot.appendItems([model.movie.toOverview()], toSection: .description)
@@ -219,5 +231,10 @@ extension DetailVC: DetailPresenterOutput {
             snapshot.deleteSections([.reviews])
             self.dataSource.apply(snapshot)
         }
+    }
+    
+    func displaySimilerMovies(_ list: [Movie]) {
+        snapshot.appendItems(list, toSection: .suggestion)
+        self.dataSource.apply(snapshot)
     }
 }

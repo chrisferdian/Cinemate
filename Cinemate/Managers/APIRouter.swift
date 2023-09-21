@@ -12,6 +12,7 @@ enum APIRouter {
     case genres
     case videos(id: Int)
     case reviews(id: Int, page: Int)
+    case similer(id: Int)
     
     var path: String {
         switch self {
@@ -23,6 +24,8 @@ enum APIRouter {
             return "movie/\(id)/videos?language=en"
         case .reviews(let id, _):
             return "movie/\(id)/reviews"
+        case .similer(let id):
+            return "movie/\(id)/similar?language=en-US&page=1"
         }
     }
     

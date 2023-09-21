@@ -14,6 +14,8 @@ protocol DetailPresenterOutput: AnyObject {
     func displayVideos(_ videos: [MovieVideo])
     func displayReviews(_ reviews: [MovieReview])
     func displayNullReviews()
+    
+    func displaySimilerMovies(_ list: [Movie])
 }
 
 class DetailPresenter: DetailPresenterInput , DetailInteractorOutput {
@@ -24,6 +26,7 @@ class DetailPresenter: DetailPresenterInput , DetailInteractorOutput {
     func viewdidLoad(entity: DetailEntiy) {
         interactor?.fetchVideos(id: entity.movie.id)
         interactor?.fetchReviews(id: entity.movie.id)
+        interactor?.fetchSimilerMovies(id: entity.movie.id)
     }
     
     func didFetchVideos(_ list: [MovieVideo]) {
@@ -49,4 +52,13 @@ class DetailPresenter: DetailPresenterInput , DetailInteractorOutput {
     func presentReviews(entity: DetailEntiy) {
         router?.navigateToReviews(entity: entity)
     }
+    
+    func didFetchSimilers(_ list: [Movie]) {
+        view?.displaySimilerMovies(list)
+    }
+    
+    func didFailToFetchSimilers(withError error: Error) {
+        
+    }
+    
 }
