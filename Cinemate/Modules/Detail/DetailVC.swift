@@ -29,7 +29,6 @@ class DetailVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = model.movie.title
         view.addSubview(collectionView)
         collectionView.fillSuperView()
         collectionView.dataSource = self.dataSource
@@ -117,9 +116,8 @@ class DetailVC: UIViewController {
         return section
     }
     func createHorizontalScroll() -> NSCollectionLayoutSection {
-        let width = Int(screenWidth * 0.37)
+        let width = Int(screenWidth * 0.9)
         let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .absolute(CGFloat(width)), heightDimension: .absolute(192)))
-//        item.contentInsets = .init(top: 0, leading: 10, bottom: 0, trailing: 0)
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .estimated(screenWidth), heightDimension: .absolute(192)), subitems: [item])
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = .init(top: 8, leading: 12, bottom: 12, trailing: 12)
@@ -184,6 +182,10 @@ class DetailVC: UIViewController {
             switch kind {
             case UICollectionView.elementKindSectionHeader:
                 let header: DetailReviewHeaderView = collectionView.dequeue(header: indexPath)
+                header.onTappedSeeAll = { [weak self] in
+                    guard let `self` = self else { return }
+                    presenter.presentReviews(entity: self.model)
+                }
                 return header
             default:
                 let footer: DetailReviewFooterView = collectionView.dequeue(footer: indexPath)
@@ -210,5 +212,12 @@ extension DetailVC: DetailPresenterOutput {
     func displayReviews(_ reviews: [MovieReview]) {
         snapshot.appendItems(reviews, toSection: .reviews)
         self.dataSource.apply(snapshot)
+    }
+    
+    func displayNullReviews() {
+        if snapshot.sectionIdentifiers.contains(.reviews) {
+            snapshot.deleteSections([.reviews])
+            self.dataSource.apply(snapshot)
+        }
     }
 }

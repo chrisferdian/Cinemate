@@ -36,6 +36,12 @@
 		3A748DA02ABBEE5E0067F6EA /* DetailOverviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A748D9F2ABBEE5E0067F6EA /* DetailOverviewCell.swift */; };
 		3A748DA22ABBF2730067F6EA /* DetailReviewItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A748DA12ABBF2730067F6EA /* DetailReviewItemCell.swift */; };
 		3A748DA42ABBFC9D0067F6EA /* DetailSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A748DA32ABBFC9D0067F6EA /* DetailSection.swift */; };
+		3A748DA72ABC04000067F6EA /* ReviewsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A748DA62ABC04000067F6EA /* ReviewsVC.swift */; };
+		3A748DA92ABC09FF0067F6EA /* ReviewsInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A748DA82ABC09FF0067F6EA /* ReviewsInteractor.swift */; };
+		3A748DAB2ABC0A0A0067F6EA /* ReviewsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A748DAA2ABC0A0A0067F6EA /* ReviewsPresenter.swift */; };
+		3A748DAD2ABC0A120067F6EA /* ReviewEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A748DAC2ABC0A120067F6EA /* ReviewEntity.swift */; };
+		3A748DAF2ABC0A1D0067F6EA /* ReviewRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A748DAE2ABC0A1D0067F6EA /* ReviewRouter.swift */; };
+		3A748DB12ABC0A4A0067F6EA /* ReviewBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A748DB02ABC0A4A0067F6EA /* ReviewBuilder.swift */; };
 		3AE70C2B2AB8537300446A6C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE70C2A2AB8537300446A6C /* AppDelegate.swift */; };
 		3AE70C2D2AB8537300446A6C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE70C2C2AB8537300446A6C /* SceneDelegate.swift */; };
 		3AE70C2F2AB8537300446A6C /* MainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE70C2E2AB8537300446A6C /* MainVC.swift */; };
@@ -107,6 +113,12 @@
 		3A748D9F2ABBEE5E0067F6EA /* DetailOverviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailOverviewCell.swift; sourceTree = "<group>"; };
 		3A748DA12ABBF2730067F6EA /* DetailReviewItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailReviewItemCell.swift; sourceTree = "<group>"; };
 		3A748DA32ABBFC9D0067F6EA /* DetailSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailSection.swift; sourceTree = "<group>"; };
+		3A748DA62ABC04000067F6EA /* ReviewsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewsVC.swift; sourceTree = "<group>"; };
+		3A748DA82ABC09FF0067F6EA /* ReviewsInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewsInteractor.swift; sourceTree = "<group>"; };
+		3A748DAA2ABC0A0A0067F6EA /* ReviewsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewsPresenter.swift; sourceTree = "<group>"; };
+		3A748DAC2ABC0A120067F6EA /* ReviewEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewEntity.swift; sourceTree = "<group>"; };
+		3A748DAE2ABC0A1D0067F6EA /* ReviewRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewRouter.swift; sourceTree = "<group>"; };
+		3A748DB02ABC0A4A0067F6EA /* ReviewBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewBuilder.swift; sourceTree = "<group>"; };
 		3AE70C272AB8537300446A6C /* Cinemate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cinemate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3AE70C2A2AB8537300446A6C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3AE70C2C2AB8537300446A6C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -212,6 +224,19 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
+		3A748DA52ABC03B60067F6EA /* Reviews */ = {
+			isa = PBXGroup;
+			children = (
+				3A748DA62ABC04000067F6EA /* ReviewsVC.swift */,
+				3A748DA82ABC09FF0067F6EA /* ReviewsInteractor.swift */,
+				3A748DAA2ABC0A0A0067F6EA /* ReviewsPresenter.swift */,
+				3A748DAC2ABC0A120067F6EA /* ReviewEntity.swift */,
+				3A748DAE2ABC0A1D0067F6EA /* ReviewRouter.swift */,
+				3A748DB02ABC0A4A0067F6EA /* ReviewBuilder.swift */,
+			);
+			path = Reviews;
+			sourceTree = "<group>";
+		};
 		3AE70C1E2AB8537300446A6C = {
 			isa = PBXGroup;
 			children = (
@@ -293,6 +318,7 @@
 		3AE70C662AB9188600446A6C /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				3A748DA52ABC03B60067F6EA /* Reviews */,
 				3A748D8D2ABBCAD40067F6EA /* Detail */,
 				3A748D7C2ABB9F0F0067F6EA /* Genres */,
 				3AE70C672AB9188C00446A6C /* Main */,
@@ -576,6 +602,7 @@
 			files = (
 				3AE70C6C2AB9197900446A6C /* UIImageView+Extensions.swift in Sources */,
 				3A748D7E2ABB9F1D0067F6EA /* GenresVC.swift in Sources */,
+				3A748DB12ABC0A4A0067F6EA /* ReviewBuilder.swift in Sources */,
 				3A4653CE2AB9A5DB0073FA31 /* NetworkError.swift in Sources */,
 				3A4653CA2AB9A5B50073FA31 /* APIRouter.swift in Sources */,
 				3A4653D42ABA5BFE0073FA31 /* MainRouter.swift in Sources */,
@@ -586,10 +613,13 @@
 				3A4653CC2AB9A5C70073FA31 /* HttpMethod.swift in Sources */,
 				3A748D932ABBCB470067F6EA /* DetailInteractor.swift in Sources */,
 				3A748D882ABBA7F90067F6EA /* GenresEntity.swift in Sources */,
+				3A748DAF2ABC0A1D0067F6EA /* ReviewRouter.swift in Sources */,
 				3AE70C6A2AB918B900446A6C /* ImageCVCell.swift in Sources */,
 				3A748D972ABBCB5A0067F6EA /* DetailRouter.swift in Sources */,
 				3A4653D22AB9D39B0073FA31 /* LoadingCVCell.swift in Sources */,
 				3A748D992ABBCBCD0067F6EA /* DetailBuilder.swift in Sources */,
+				3A748DA72ABC04000067F6EA /* ReviewsVC.swift in Sources */,
+				3A748DA92ABC09FF0067F6EA /* ReviewsInteractor.swift in Sources */,
 				3A748D862ABBA7050067F6EA /* GenresInteractor.swift in Sources */,
 				3AE70C652AB85DE200446A6C /* Observable.swift in Sources */,
 				3AE70C2F2AB8537300446A6C /* MainVC.swift in Sources */,
@@ -607,9 +637,11 @@
 				3A748D912ABBCB3C0067F6EA /* DetailPresenter.swift in Sources */,
 				3AE70C5E2AB85D2000446A6C /* UIEdgeInsets+Extension.swift in Sources */,
 				3A748D9C2ABBE8990067F6EA /* DetailTitleCell.swift in Sources */,
+				3A748DAD2ABC0A120067F6EA /* ReviewEntity.swift in Sources */,
 				3AE70C2D2AB8537300446A6C /* SceneDelegate.swift in Sources */,
 				3A748D842ABBA66B0067F6EA /* GenresPresenter.swift in Sources */,
 				3A748D822ABBA5430067F6EA /* GenreCVCell.swift in Sources */,
+				3A748DAB2ABC0A0A0067F6EA /* ReviewsPresenter.swift in Sources */,
 				3A748D952ABBCB510067F6EA /* DetailEntity.swift in Sources */,
 				3AE70C622AB85D5300446A6C /* UILabel+Extensions.swift in Sources */,
 				3A4653D02AB9A7840073FA31 /* MainEntity.swift in Sources */,

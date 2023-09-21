@@ -18,6 +18,9 @@ class DetailBuilder {
         interactor.output = presenter
         viewController.presenter = presenter
         
+        let router = DetailRouterImpl(viewController: viewController)
+        presenter.router = router
+        
         return viewController
     }
 }

@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import SDWebImage
+
 class DetailReviewFooterView: UICollectionReusableView {
     override init(frame: CGRect) {
         
@@ -24,6 +26,8 @@ class DetailReviewFooterView: UICollectionReusableView {
 }
 class DetailReviewHeaderView: UICollectionReusableView {
     
+    var onTappedSeeAll: (()-> Void)?
+    
     override init(frame: CGRect) {
         
         super.init(frame: frame)
@@ -38,14 +42,26 @@ class DetailReviewHeaderView: UICollectionReusableView {
     private func setupView() {
         backgroundColor = .black
         let label = UILabel()
+        let buttonSeeAll = UIButton()
+        buttonSeeAll.translatesAutoresizingMaskIntoConstraints = false
+        buttonSeeAll.setTitle("See All", for: .normal)
+        
         label.translatesAutoresizingMaskIntoConstraints = false
         addSubview(label)
         label.horizontalSuperview()
-        label.verticalSuperview(space: 8)
+        label.leftToSuperview(space: 16)
         label.text = "Reviews"
         label.font = .systemFont(ofSize: 24, weight: .bold)
+        
+        addSubview(buttonSeeAll)
+        buttonSeeAll.rightToSuperview(space: -16)
+        buttonSeeAll.centerY(toView: label)
+        buttonSeeAll.addTarget(self, action: #selector(didTapSeeAll), for: .touchUpInside)
     }
     
+    @objc func didTapSeeAll() {
+        onTappedSeeAll?()
+    }
 }
 class DetailReviewItemCell: CollectionCell {
     
@@ -83,5 +99,9 @@ class DetailReviewItemCell: CollectionCell {
     func bind(with review: MovieReview) {
         labelName.text = review.author
         labelComment.text = review.content
+        if let path = review.authorDetails?.avatarPath,
+        let url = URL(string: "https://image.tmdb.org/t/p/w200/\(path)") {
+            imageViewAvatar.sd_setImage(with: url)
+        }
     }
 }

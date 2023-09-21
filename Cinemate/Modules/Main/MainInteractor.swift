@@ -26,6 +26,7 @@ class MainInteractor: MainInteractorInput {
         NetworkingManager.shared.request(.discover(page: page, genre: genre?.id), method: .get) { [weak self] (result: Result<MainEntity.Response, Error>) in
             switch result {
             case .success(let success):
+                self?.totalPages = success.total_pages
                 self?.output?.didFetchMovies(success.results)
             case .failure(let failure):
                 self?.output?.didFailToFetchMovies(withError: failure)
