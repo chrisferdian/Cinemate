@@ -60,4 +60,4 @@ Cinemate is released under the [MIT License](LICENSE).
 
 ---
 
-Enjoy exploring the world of movies with Cinemate! For questions or feedback, please [contact us](mailto:your.email@example.com).
+Enjoy exploring the world of movies with Cinemate! For questions or feedback, please [contact us](mailto:chris.ferdianl@gmail.com).
