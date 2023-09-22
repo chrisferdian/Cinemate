@@ -22,6 +22,14 @@ class DetailReviewFooterView: UICollectionReusableView {
     
     func setupView() {
         backgroundColor = .black
+        let divider = UIView()
+        divider.backgroundColor = .gray
+        divider.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(divider)
+        divider.rightToSuperview()
+        divider.leftToSuperview(space: 32)
+        divider.verticalSuperview(space: 14)
+        divider.height(1)
     }
 }
 class DetailReviewHeaderView: UICollectionReusableView {

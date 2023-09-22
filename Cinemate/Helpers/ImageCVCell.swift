@@ -29,4 +29,9 @@ class ImageCVCell: CollectionCell {
         guard let url = URL(string: urlString) else { return }
         imageView.sd_setImage(with: url)
     }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        imageView.image = nil
+    }
 }

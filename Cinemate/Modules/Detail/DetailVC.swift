@@ -71,7 +71,7 @@ class DetailVC: UIViewController {
             item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 5)
             
             // Create a group with 3 items in 1 row
-            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(160))
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(160))
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
             
             // Define the spacing between groups (vertical)
@@ -94,9 +94,10 @@ class DetailVC: UIViewController {
         case .description:
             return defaultLayout(with: 44)
         case .reviews:
-            return createHorizontalScroll()
+            let width = CGFloat(screenWidth * 0.9)
+            return createHorizontalScroll(with: .init(widthDimension: .absolute(width), heightDimension: .absolute(192)), enableSupplementaryItems: true)
         case .credits:
-            return createCreditLayout()
+            return createHorizontalScroll(with: .init(widthDimension: .absolute(66), heightDimension: .absolute(66)), enableSupplementaryItems: true)
         }
     }
     
@@ -123,31 +124,20 @@ class DetailVC: UIViewController {
         
         return section
     }
-    func createHorizontalScroll() -> NSCollectionLayoutSection {
-        let width = Int(screenWidth * 0.9)
-        let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .absolute(CGFloat(width)), heightDimension: .absolute(192)))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .estimated(screenWidth), heightDimension: .absolute(192)), subitems: [item])
+    func createHorizontalScroll(with size: NSCollectionLayoutSize, enableSupplementaryItems: Bool) -> NSCollectionLayoutSection {
+//        let width = Int(screenWidth * 0.9)
+        let item = NSCollectionLayoutItem(layoutSize: size)
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .estimated(screenWidth), heightDimension: .estimated(size.heightDimension.dimension)), subitems: [item])
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = .init(top: 8, leading: 12, bottom: 12, trailing: 12)
         section.interGroupSpacing = 8
         section.orthogonalScrollingBehavior = .continuous
-        section.boundarySupplementaryItems = [
-            .init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .topLeading),
-            .init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50)), elementKind: UICollectionView.elementKindSectionFooter, alignment: .topLeading)
-        ]
-        return section
-    }
-    func createCreditLayout() -> NSCollectionLayoutSection {
-        let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .absolute(66), heightDimension: .absolute(66)))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .estimated(screenWidth), heightDimension: .absolute(66)), subitems: [item])
-        let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = .init(top: 8, leading: 12, bottom: 12, trailing: 12)
-        section.interGroupSpacing = 8
-        section.orthogonalScrollingBehavior = .continuous
-        section.boundarySupplementaryItems = [
-            .init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .topLeading),
-            .init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50)), elementKind: UICollectionView.elementKindSectionFooter, alignment: .topLeading)
-        ]
+        if enableSupplementaryItems {
+            section.boundarySupplementaryItems = [
+                .init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top),
+                .init(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50)), elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottom)
+            ]
+        }
         return section
     }
     private func configureDataSource() -> DetailDataSource {
