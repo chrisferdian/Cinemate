@@ -17,6 +17,7 @@ class GenreCVCell: CollectionCell {
         contentView.addSubview(labelName)
         labelName.translatesAutoresizingMaskIntoConstraints = false
         labelName.fillSuperView(space: .init(space: 8))
+        labelName.textColor = .white
     }
     
     func bind(with genre: GenreInfo) {
