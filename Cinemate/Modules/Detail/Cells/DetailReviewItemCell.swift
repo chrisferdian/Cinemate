@@ -56,8 +56,8 @@ class DetailReviewHeaderView: UICollectionReusableView {
         
         label.translatesAutoresizingMaskIntoConstraints = false
         addSubview(label)
-        label.horizontalSuperview()
-        label.leftToSuperview(space: 16)
+        label.verticalSuperview()
+        label.leftToSuperview()
         label.text = ""
         label.font = .systemFont(ofSize: 24, weight: .bold)
         

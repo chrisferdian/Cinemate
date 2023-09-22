@@ -7,7 +7,12 @@
 
 import UIKit
 import SDWebImage
-
+enum ImageSize: String {
+    case w45 = "w45"
+    case w500 = "w500"
+    case w780 = "w780"
+    case original = "original"
+}
 class ImageCVCell: CollectionCell {
     
     private let imageView = UIImageView(contentMode: .scaleAspectFill)
@@ -19,13 +24,13 @@ class ImageCVCell: CollectionCell {
         imageView.backgroundColor = .random
     }
     
-    func bind(with movie: Movie) {
-        let urlString = "http://image.tmdb.org/t/p/w500/"+(movie.poster_path ?? "-")
+    func bind(with movie: Movie, size: ImageSize = .w500) {
+        let urlString = "http://image.tmdb.org/t/p/\(size.rawValue)/"+(movie.poster_path ?? "-")
         guard let url = URL(string: urlString) else { return }
         imageView.sd_setImage(with: url)
     }
-    func bind(with path: String) {
-        let urlString = "http://image.tmdb.org/t/p/w500/"+(path)
+    func bind(with path: String, size: ImageSize = .w500) {
+        let urlString = "http://image.tmdb.org/t/p/\(size.rawValue)/"+(path)
         guard let url = URL(string: urlString) else { return }
         imageView.sd_setImage(with: url)
     }

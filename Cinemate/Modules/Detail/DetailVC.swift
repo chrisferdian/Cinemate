@@ -30,7 +30,9 @@ class DetailVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(collectionView)
-        collectionView.fillSuperView()
+        collectionView.horizontalSuperview()
+        collectionView.topToSuperview(space: -(64 + UIApplication.topNotchHeight))
+        collectionView.bottomToSuperview()
         collectionView.dataSource = self.dataSource
 
         presenter.viewdidLoad(entity: model)
@@ -86,7 +88,7 @@ class DetailVC: UIViewController {
             ]
             return section
         case .backdrop:
-            return defaultLayout(with: 200)
+            return defaultLayout(with: 350)
         case .title:
             return defaultLayout(with: 50)
         case .headerVideos:
@@ -147,7 +149,7 @@ class DetailVC: UIViewController {
             case .backdrop:
                 let cell: ImageCVCell = collectionView.dequeue(at: indexPath)
                 if let path = itemIdentifier as? String {
-                    cell.bind(with: path)
+                    cell.bind(with: path, size: .w780)
                 }
                 return cell
             case .title:
@@ -203,7 +205,7 @@ class DetailVC: UIViewController {
             case UICollectionView.elementKindSectionHeader:
                 let header: DetailReviewHeaderView = collectionView.dequeue(header: indexPath)
                 header.setTitle(with: section.sectionTitle)
-                if section == .suggestion {
+                if section == .suggestion || section == .credits {
                     header.setSeeAllVisibility(isHidden: true)
                 } else {
                     header.setSeeAllVisibility(isHidden: false)
@@ -264,5 +266,54 @@ extension DetailVC: DetailPresenterOutput {
     func displayCredits(cast: [CastMovie]) {
         snapshot.appendItems(cast, toSection: .credits)
         self.dataSource.apply(snapshot)
+    }
+}
+
+
+extension UIApplication {
+    var mainWindow: UIWindow? {
+        if let scene = UIApplication.shared.connectedScenes.first,
+            let windowScene = (scene as? UIWindowScene) {
+            return windowScene.windows.first { $0.isKeyWindow }
+        }
+        return nil
+    }
+    class func topVC(_ base: UIViewController? = UIApplication.shared.mainWindow?.rootViewController) -> UIViewController? {
+        if let nav = base as? UINavigationController {
+            return topVC(nav.visibleViewController)
+        }
+        if let tab = base as? UITabBarController {
+            if let selected = tab.selectedViewController {
+                return topVC(selected)
+            }
+        }
+        if let presented = base?.presentedViewController {
+            return topVC(presented)
+        }
+        return base
+    }
+
+    class func present(_ controller: UIViewController) {
+        topVC()?.present(controller, animated: true)
+    }
+
+    class func push(_ controller: UIViewController) {
+        let topController = topVC()
+        topController?.navigationController?.pushViewController(controller, animated: true)
+    }
+
+    class var topNotchHeight: CGFloat {
+        if let scene = UIApplication.shared.connectedScenes.first,
+            let windowScene = (scene as? UIWindowScene) {
+            return windowScene.windows.first?.safeAreaInsets.top ?? 0.0
+        }
+        return 0.0
+    }
+    class var bottomNotchHeight: CGFloat {
+        if let scene = UIApplication.shared.connectedScenes.first,
+            let windowScene = (scene as? UIWindowScene) {
+            return windowScene.windows.first?.safeAreaInsets.bottom ?? 0.0
+        }
+        return 0.0
     }
 }
