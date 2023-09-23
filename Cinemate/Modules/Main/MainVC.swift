@@ -38,11 +38,18 @@ class MainVC: UIViewController {
         barButtonItem.tintColor = .white
         self.navigationItem.leftBarButtonItem = barButtonItem
         
+        let settings = UIBarButtonItem(title: nil, image: .init(systemName: "gear"), target: self, action: #selector(settingTapped))
+        settings.tintColor = .white
+        self.navigationItem.rightBarButtonItem = settings
+        
         view.backgroundColor = .black
         view.addSubview(collectionView)
         collectionView.fillSuperviewSafeArea()
         collectionView.dataSource = self.dataSource
         presenter.viewDidLoad()
+    }
+    @objc func settingTapped() {
+        self.navigationController?.pushViewController(PreferencesVC(), animated: true)
     }
     @objc func genresTapped() {
         presenter.didTapGenres()
