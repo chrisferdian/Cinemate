@@ -18,7 +18,7 @@ class LoadingCVCell: CollectionCell {
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         activityIndicator.centerXToSuperview()
         activityIndicator.centerYToSuperview()
-        activityIndicator.tintColor = .white
+        activityIndicator.color = .white
         activityIndicator.startAnimating()
     }
     

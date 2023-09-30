@@ -37,7 +37,8 @@ enum APIRouter {
         case .discover(let page, let genre):
             return [
                 "page": page,
-                "with_genres": genre
+                "with_genres": genre,
+                "include_adult": UserPreference.isAdult
             ]
         case .reviews(_, let page):
             return [
